@@ -17,7 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install "pymongo[srv]"
 
 # Download the specific SpaCy medium model required by your NLP script
-RUN python -m spacy download en_core_web_md
+RUN pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.8.0/en_core_web_md-3.8.0.tar.gz
 
 # Copy the rest of the application code
 COPY . .
