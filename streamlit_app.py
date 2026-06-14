@@ -33,29 +33,49 @@ def signup_ui():
             st.error("Server Error: Received HTML instead of JSON. Check API_URL.")
             st.code(res.text[:500])
 
-# --- LOGIN ---
+# Use the internal loopback address, NOT the public DuckDNS URL
+API_URL = "http://127.0.0.1:8000"
+
 def login_ui():
-    st.subheader("🔐 Login")
+    st.header("Login")
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
-
+    
     if st.button("Login"):
-        res = requests.post(
-            f"{API_URL}/login",
-            data={"username": username, "password": password}
-        )
         try:
-            data = res.json()
-            if data.get("message") == "Login success":
-                st.session_state.logged_in = True
-                st.session_state.username = username
-                st.session_state.role = data["role"]
-                st.success("Login successful")
-                st.rerun()
+            # The backend lives on the same machine, so we talk to localhost
+            res = requests.post(f"{API_URL}/login", json={"username": username, "password": password})
+            if res.status_code == 200:
+                st.success("Login Successful!")
             else:
-                st.error(data.get("message", "Invalid credentials"))
-        except Exception:
-            st.error("Login failed. Server returned non-JSON response.")
+                st.error("Login failed.")
+        except Exception as e:
+            st.error(f"Could not connect to backend: {e}")
+
+# Main app logic...
+# # --- LOGIN ---
+# def login_ui():
+#     st.subheader("🔐 Login")
+#     username = st.text_input("Username")
+#     password = st.text_input("Password", type="password")
+
+#     if st.button("Login"):
+#         res = requests.post(
+#             f"{API_URL}/login",
+#             data={"username": username, "password": password}
+#         )
+#         try:
+#             data = res.json()
+#             if data.get("message") == "Login success":
+#                 st.session_state.logged_in = True
+#                 st.session_state.username = username
+#                 st.session_state.role = data["role"]
+#                 st.success("Login successful")
+#                 st.rerun()
+#             else:
+#                 st.error(data.get("message", "Invalid credentials"))
+#         except Exception:
+#             st.error("Login failed. Server returned non-JSON response.")
 
 # --- STUDENT DASHBOARD ---
 def student_dashboard():
