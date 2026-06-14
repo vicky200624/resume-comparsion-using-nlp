@@ -4,7 +4,8 @@ import requests
 
 # ⚠️ CHANGE THIS URL to your RENDER or LOCALHOST URL or set env var API_URL
 # Default to localhost for local development
-API_URL = "http://resume-compare.duckdns.org:8000"
+#API_URL = "http://resume-compare.duckdns.org:8000"
+API_URL = "http://127.0.0.1:8000"
 st.title("📄 AI Resume Comparison System")
 
 if "logged_in" not in st.session_state:
