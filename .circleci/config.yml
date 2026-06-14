@@ -1,0 +1,27 @@
+version: 2.1
+jobs:
+  build_and_push:
+    docker:
+      - image: cimg/python:3.11
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+      - run:
+          name: Build Docker Image
+          command: docker build -t $DOCKER_USERNAME/resume-analyzer:latest .
+      - run:
+          name: Push to Docker Hub
+          command: |
+            echo "Logging into Docker Hub..."
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+            echo "Pushing image..."
+            docker push $DOCKER_USERNAME/resume-analyzer:latest
+
+workflows:
+  deploy_workflow:
+    jobs:
+      - build_and_push:
+          filters:
+            branches:
+              only: main
