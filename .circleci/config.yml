@@ -6,7 +6,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker:
-          version: 20.10.14
+          version: default
       - run:
           name: Build Docker Image
           command: docker build -t $DOCKER_USERNAME/resume-analyzer:latest .
