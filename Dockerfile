@@ -2,7 +2,6 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies including SSL support for MongoDB
 RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     libjpeg-dev \
@@ -15,10 +14,12 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install "pymongo[srv]"
 
-# Download the specific SpaCy model
 RUN pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.8.0/en_core_web_md-3.8.0.tar.gz
 
 COPY . .
+
+# ADD THIS LINE RIGHT HERE:
+RUN mkdir -p uploads
 
 RUN chmod +x start.sh
 
